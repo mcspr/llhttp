@@ -79,6 +79,7 @@ postversion: release
 	git checkout main
 
 generate:
+	bash apply-patch.sh
 	npx ts-node bin/generate.ts
 
 install: build/libllhttp.a build/libllhttp.so

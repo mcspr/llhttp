@@ -1,0 +1,31 @@
+diff '--color=auto' -ru node_modules/llparse/lib/implementation/c/node/error.js node_modules/llparse/lib/implementation/c/node/error.js
+--- node_modules/llparse/lib/implementation/c/node/error.js
++++ node_modules/llparse/lib/implementation/c/node/error.js
+@@ -14,7 +14,7 @@
+             hexCode = '0x' + this.ref.code.toString(16);
+         }
+         out.push(`${ctx.errorField()} = ${hexCode};`);
+-        out.push(`${ctx.reasonField()} = ${ctx.cstring(this.ref.reason)};`);
++        out.push(`${ctx.reasonField()} = PSTR(${ctx.cstring(this.ref.reason)});`);
+         out.push(`${ctx.errorPosField()} = (const char*) ${ctx.posArg()};`);
+     }
+     doBuild(out) {
+@@ -26,4 +26,4 @@
+     }
+ }
+ exports.Error = ErrorNode;
+-//# sourceMappingURL=error.js.map
+\ No newline at end of file
++//# sourceMappingURL=error.js.map
+diff '--color=auto' -ru node_modules/llparse/src/implementation/c/node/error.ts node_modules/llparse/src/implementation/c/node/error.ts
+--- node_modules/llparse/src/implementation/c/node/error.ts
++++ node_modules/llparse/src/implementation/c/node/error.ts
+@@ -16,7 +16,7 @@
+     }
+ 
+     out.push(`${ctx.errorField()} = ${hexCode};`);
+-    out.push(`${ctx.reasonField()} = ${ctx.cstring(this.ref.reason)};`);
++    out.push(`${ctx.reasonField()} = PSTR(${ctx.cstring(this.ref.reason)});`);
+     out.push(`${ctx.errorPosField()} = (const char*) ${ctx.posArg()};`);
+   }
+ 
