@@ -1,3 +1,8 @@
+# **ESP8266**
+
+* Using build flags from [esp8266/Arduino](https://github.com/esp8266/Arduino/blob/master/platform.txt)
+* Wrap every error reason string within PSTR(...) so we don't blow up RAM
+
 # llhttp
 [![CI](https://github.com/nodejs/llhttp/workflows/CI/badge.svg)](https://github.com/nodejs/llhttp/actions?query=workflow%3ACI)
 
