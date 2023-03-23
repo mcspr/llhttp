@@ -1,12 +1,9 @@
-CLANG ?= clang
+CC ?= xtensa-lx106-elf-gcc
 CFLAGS ?=
 OS ?=
 
-CFLAGS += -Os -g3 -Wall -Wextra -Wno-unused-parameter
-ifneq ($(OS),Windows_NT) 
-	# NOTE: clang on windows does not support fPIC
-	CFLAGS += -fPIC
-endif
+CFLAGS += -Os -g -Wall -Wextra -Wno-unused-parameter
+CFLAGS += -free -fipa-pta -mlongcalls -mtext-section-literals -falign-functions=4 -ffunction-sections -fdata-sections -nostdlib
 
 INCLUDES += -Ibuild/
 
@@ -23,18 +20,18 @@ clean:
 
 build/libllhttp.so: build/c/llhttp.o build/native/api.o \
 		build/native/http.o
-	$(CLANG) -shared $^ -o $@
+	$(CC) -shared $^ -o $@
 
 build/libllhttp.a: build/c/llhttp.o build/native/api.o \
 		build/native/http.o
 	$(AR) rcs $@ build/c/llhttp.o build/native/api.o build/native/http.o
 
 build/c/llhttp.o: build/c/llhttp.c
-	$(CLANG) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 build/native/%.o: src/native/%.c build/llhttp.h src/native/api.h \
 		build/native
-	$(CLANG) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 build/llhttp.h: generate
 build/c/llhttp.c: generate
