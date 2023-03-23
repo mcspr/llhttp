@@ -26,7 +26,7 @@
     err = settings->NAME((PARSER), (START), (LEN));                           \
     if (err == -1) {                                                          \
       err = HPE_USER;                                                         \
-      llhttp_set_error_reason((PARSER), "Span callback error in " #NAME);     \
+      llhttp_set_error_reason((PARSER), PSTR(#NAME));                         \
     }                                                                         \
   } while (0)
 
@@ -164,7 +164,7 @@ llhttp_errno_t llhttp_finish(llhttp_t* parser) {
     case HTTP_FINISH_SAFE:
       return HPE_OK;
     case HTTP_FINISH_UNSAFE:
-      parser->reason = "Invalid EOF state";
+      parser->reason = PSTR("Invalid EOF state");
       return HPE_INVALID_EOF_STATE;
     default:
       abort();
@@ -178,7 +178,7 @@ void llhttp_pause(llhttp_t* parser) {
   }
 
   parser->error = HPE_PAUSED;
-  parser->reason = "Paused";
+  parser->reason = PSTR("Paused");
 }
 
 
@@ -221,7 +221,7 @@ const char* llhttp_get_error_pos(const llhttp_t* parser) {
 
 
 const char* llhttp_errno_name(llhttp_errno_t err) {
-#define HTTP_ERRNO_GEN(CODE, NAME, _) case HPE_##NAME: return "HPE_" #NAME;
+#define HTTP_ERRNO_GEN(CODE, NAME, _) case HPE_##NAME: return PSTR("HPE_" #NAME);
   switch (err) {
     HTTP_ERRNO_MAP(HTTP_ERRNO_GEN)
     default: abort();
@@ -231,7 +231,7 @@ const char* llhttp_errno_name(llhttp_errno_t err) {
 
 
 const char* llhttp_method_name(llhttp_method_t method) {
-#define HTTP_METHOD_GEN(NUM, NAME, STRING) case HTTP_##NAME: return #STRING;
+#define HTTP_METHOD_GEN(NUM, NAME, STRING) case HTTP_##NAME: return PSTR(#STRING);
   switch (method) {
     HTTP_ALL_METHOD_MAP(HTTP_METHOD_GEN)
     default: abort();
@@ -240,7 +240,7 @@ const char* llhttp_method_name(llhttp_method_t method) {
 }
 
 const char* llhttp_status_name(llhttp_status_t status) {
-#define HTTP_STATUS_GEN(NUM, NAME, STRING) case HTTP_STATUS_##NAME: return #STRING;
+#define HTTP_STATUS_GEN(NUM, NAME, STRING) case HTTP_STATUS_##NAME: return PSTR(#STRING);
   switch (status) {
     HTTP_STATUS_MAP(HTTP_STATUS_GEN)
     default: abort();
