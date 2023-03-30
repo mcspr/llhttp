@@ -12,24 +12,24 @@ PREFIX ?= /usr/local
 LIBDIR = $(PREFIX)/lib
 INCLUDEDIR = $(PREFIX)/include
 
+OBJS := build/c/llhttp.c.o build/native/api.c.o build/native/http.c.o
+
 all: build/libllhttp.a build/libllhttp.so
 
 clean:
 	rm -rf release/
 	rm -rf build/
 
-build/libllhttp.so: build/c/llhttp.o build/native/api.o \
-		build/native/http.o
+build/libllhttp.so: $(OBJS)
 	$(CC) -shared $^ -o $@
 
-build/libllhttp.a: build/c/llhttp.o build/native/api.o \
-		build/native/http.o
-	$(AR) rcs $@ build/c/llhttp.o build/native/api.o build/native/http.o
+build/libllhttp.a: $(OBJS)
+	$(AR) rcs $@ $^
 
-build/c/llhttp.o: build/c/llhttp.c
+build/c/%.c.o: build/c/%.c build/llhttp.h
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-build/native/%.o: src/native/%.c build/llhttp.h src/native/api.h \
+build/native/%.c.o: src/native/%.c build/llhttp.h src/native/api.h \
 		build/native
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
